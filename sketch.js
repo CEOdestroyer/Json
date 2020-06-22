@@ -1,3 +1,6 @@
+var dropdown;
+var mode;
+
 // Function to delete element from the array
 function removeFromArray(arr, elt) {
     for (var i = arr.length - 1; i >= 0; i--) {
@@ -14,8 +17,8 @@ function removeFromArray(arr, elt) {
   }
   
   // How many columns and rows?
-  var cols = 10;
-  var rows = 10;
+  var cols = 18;
+  var rows = 18;
   
   // This will be the 2D array
   var grid = new Array(cols);
@@ -34,18 +37,41 @@ function removeFromArray(arr, elt) {
   // The road taken
   var path = [];
   let img;
+  var button;
+  var button2;
 
   let easing = 0.05;
+  var data = {};
+
   function preload() {
+    data = loadJSON('texto.json');
+
+    dropdown = createSelect('');
+    
     img = loadImage('assets/foto_pronto.jpg');
+    
   }
 
   function setup() {
     //screen
+    
+    var shopping = data.shopping;
+    console.log(shopping);
 
-    createCanvas(500, 500);
+    for (var i = 0; i < shopping.length; i++) {
+      var caminho = shopping[i].caminhos;
+      if (caminho == undefined) break;
+      for (var j = 0; j < caminho.length; j++) {
+        dropdown.option(caminho[j]);
+      }
+    }
+
+    mode=0;//initialy not started
+    createCanvas(500, 500)
+    
     console.log('A*');
-  
+
+    
     // Grid cell size
     w = width / cols;
     h = height / rows;
@@ -67,109 +93,64 @@ function removeFromArray(arr, elt) {
         grid[i][j].addNeighbors(grid);
       }
     }
-  
-    // Start and end
-    start = grid[0][0];
-    end = grid[(cols/2)-1][rows - 1];
+
+
+    var E1 = grid[1][9]
+    var E2 = grid[16][13]
+    var E3 = grid[3][0]
+    var E4 = grid[15][17]
+    var E5 = grid[7][16]
+    var AV1 = grid[12][7]
+    var Av2 = grid[0][0]
+    var CasasB = grid[0][0]
+    var Taco = grid[2][5]
+    var Marisa = grid[2][8]
+    var Renner = grid[2][12]
+    var Tommy = grid[4][10]
+    var PracaA = grid[5][13]
+    var CK = grid[9][16]
+    var Magalu = grid[16][16]
+    var Centauro = grid[15][11]
+    var Adidas = grid[15][8]
+    var LojasA = grid[12][5]
+    var Cinemark = grid[14][4]
+    var Nike = grid[12][3]
+    var L1 = grid[4][6]
+    var L2 = grid[5][7]
+    var L3 = grid[6][8]
+    var L4 = grid[8][10]
+    var L5 = grid[9][11]
+    var L6 = grid[10][12]
+    var L7 = grid[12][14]
+    var L8 = grid[14][16]
+    var L9 = grid[3][2]
+    var L10 = grid[4][3]
+    var L11 = grid[5][4]
+    var L12 = grid[6][6]
+
+    
+    start = E1;
+    end = CK;
     start.wall = false;
-    end.wall = false;
-  
+    
     // openSet starts with beginning only
     openSet.push(start);
   }
+
   
+
   function draw() {
+    clear();
+    if(mode ==0){
+      
+    }
+    KeyPressed();
+    
+    if (mode==1){
     // Am I still searching?
-    if (openSet.length > 0) {
-      // Best next option
-      var winner = 0;
-      for (var i = 0; i < openSet.length; i++) {
-        if (openSet[i].f < openSet[winner].f) {
-          winner = i;
-        }
-      }
-      var current = openSet[winner];
-  
-      // Did I finish?
-      if (current === end) {
-        noLoop();
-        console.log('DONE!');
-      }
-  
-      // Remove the current array position
-      removeFromArray(openSet, current);
-      //add this to closed set
-      closedSet.push(current);
-  
-      // Check all the neighbors
-      var neighbors = current.neighbors;
-      for (var i = 0; i < neighbors.length; i++) {
-        var neighbor = neighbors[i];
-  
-        // Valid next spot?
-        if (!closedSet.includes(neighbor) && !neighbor.wall) {
-          var tempG = current.g + heuristic(neighbor, current);
-  
-          // Is this a better path than before?
-          var newPath = false;
-          if (openSet.includes(neighbor)) {
-            if (tempG < neighbor.g) {
-              neighbor.g = tempG;
-              newPath = true;
-            }
-          } else {
-            neighbor.g = tempG;
-            newPath = true;
-            openSet.push(neighbor);
-          }
-  
-          // Yes, it's a better path
-          if (newPath) {
-            neighbor.h = heuristic(neighbor, end);
-            //neighbor.f = neighbor.g + neighbor.h;
-            //greedy
-            neighbor.f = neighbor.h;
-            //custo uniforme
-            //neighbor.f = neighbor.g;
-            
-            neighbor.previous = current;
-            
-          }
-        }
-      }
-      // Uh oh, no solution
-    } else {
-      console.log('no solution');
-      noLoop();
-      return;
-    }
-  
+    new AStart(openSet, closedSet, 1);
     // Draw current state of everything
-    background(255);
-  
-    for (var i = 0; i < cols; i++) {
-      for (var j = 0; j < rows; j++) {
-        grid[i][j].show();
-      }
-    }
-  
-    for (var i = 0; i < closedSet.length; i++) {
-      closedSet[i].show(color(255, 0, 0, 50));
-    }
-  
-    for (var i = 0; i < openSet.length; i++) {
-      openSet[i].show(color(0, 255, 0, 50));
-    }
-  
-    // Find the path by working backwards
-    path = [];
-    var temp = current;
-    path.push(temp);
-    while (temp.previous) {
-      path.push(temp.previous);
-      temp = temp.previous;
-    }
-  
+    
     // tint(255, 127); // Display at half opacity
     // Drawing path as continuous line
     noFill(); // remove the color 
@@ -178,8 +159,16 @@ function removeFromArray(arr, elt) {
     strokeWeight(w / 2);
     beginShape();
     image(img, 0, 0);
+    tint(255, 126)
     for (var i = 0; i < path.length; i++) {
       vertex(path[i].i * w + w / 2, path[i].j * h + h / 2);
     }
     endShape();
+  }
+  }
+
+  function KeyPressed() {
+    if(keyCode===ENTER){
+      mode=1;
+    }
   }

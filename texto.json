@@ -1,0 +1,53 @@
+{
+    "shopping": [{
+            "title": "lojas",
+            "caminhos": [
+                "Entrada 1",
+                "Entrada 2",
+                "Entrada 3",
+                "Entrada 4",
+                "Entrada 5",
+                "Área Verde 1",
+                "Área Verde 2",
+                "Casas Bahia",
+                "Taco",
+                "Marisa",
+                "Renner",
+                "Tommy Hilfigher",
+                "Praça de Alimentação",
+                "Calvin Klein",
+                "Magalu",
+                "Centauro",
+                "Adidas",
+                "Lojas Americanas",
+                "Cinemark",
+                "Nike",
+                "Loja 1",
+                "Loja 2",
+                "Loja 3",
+                "Loja 4",
+                "Loja 5",
+                "Loja 6",
+                "Loja 7",
+                "Loja 8",
+                "Loja 9",
+                "Loja 10",
+                "Loja 11",
+                "Loja 12"
+            ]
+        },
+        {
+            "title": "Metodo",
+            "metodos": [
+                "Profundidade",
+                "Profundidade Limitada",
+                "Profundidade Iterativa",
+                "Bidirecional",
+                "Custo Uniforme",
+                "A estrela (A*)",
+                "Greedy",
+                "Amplitude"
+            ] 
+        }
+    ]
+}
